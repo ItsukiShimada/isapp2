@@ -20,6 +20,12 @@
         function init() {
             var name = sessionStorage.getItem('username');
             document.getElementById('welcome').innerHTML = 'ようこそ' + name + 'さん';
+           
+        }
+
+        async function button1Pressed(){
+            var userid = sessionStorage.getItem('userid')
+            location.href = 'update.html?userid=' + userid
         }
     </script>
 
@@ -29,7 +35,7 @@
     <h1>ユーザトップ</h1>
     <p id="welcome"></p>
     <hr>
-    <p><a href="update.html?userid=midking">ユーザ情報変更</a></p>
+    <button onclick="button1Pressed()">kokodayo</button>
     <hr>
 
 </body>
