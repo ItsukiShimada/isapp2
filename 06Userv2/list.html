@@ -34,10 +34,12 @@
         }
 
         async function button1Pressed(){
+            //練習問題6-3
             var userid = document.getElementById('tf1').value;
-            var sql = `delete from Users where id = ”${userid}’’`;
+            var sql = `delete from Users where id = "${userid}"`;
             var objects = await osql.connect(sql);
             console.log(objects);
+            execSelect();
         }
     </script>
 
