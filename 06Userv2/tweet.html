@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="../lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/osql.js"></script>
+
+    <script>
+        osql.requireLogin();//すべてのページに入れる．google認証をして，osql.connect()や，osql.getMe()を使えるようにしてくれる．
+
+        $().ready(function(){
+            button1Pressed()
+            x = 0;
+            setInterval(button1Pressed,2000)
+        })
+
+        function button3Pressed() {
+            doInsert();
+        }
+
+        function button1Pressed() {
+            doSelect();
+        }
+        
+        function button2Pressed() {
+            doSearch();
+        }
+
+        async function doSearch(){
+            var userid = document.getElementById('tf1').value;
+            var sql = 'select * from Tweets where tweet like "%' + userid + '%"';
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            var html = '';
+            html = html + '<table border="1">';
+            for (var i = 0; i < objects.length; i++) {
+                var object = objects[i];
+                html = html + '<tr>';
+                html = html + '<td>' + object.id + '</td>';
+                html = html + '<td>' + object.name + '</td>';
+                html = html + '<td>' + object.tweet + '</td>';
+                html = html + '</tr>';
+            }
+            html = html + '</table>';
+            document.getElementById('result').innerHTML = html;
+        }
+
+        async function doSelect() {
+            var sql = 'select * from Tweets order by time desc limit 20';
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            var html = '';
+            html = html + '<table border="1">';
+            for (var i = 0; i < objects.length; i++) {
+                var object = objects[i];
+                html = html + '<tr>';
+                html = html + '<td>' + object.id + '</td>';
+                html = html + '<td>' + object.name + '</td>';
+                html = html + '<td>' + object.tweet + '</td>';
+                html = html + '</tr>';
+            }
+            html = html + '</table>';
+            document.getElementById('result').innerHTML = html;
+            document.getElementById('tf2').value = sessionStorage.getItem('userid');
+        }
+
+        async function doInsert() {
+            var userid = document.getElementById('tf2').value;
+            var tweet = document.getElementById('tf3').value;
+
+            var sql = `insert into Tweets (name, tweet, time) values("${userid}", "${tweet}", now());`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+
+            document.getElementById('result').innerHTML = "tweetしました";
+            document.getElementById('tf2').value = "";
+            document.getElementById('tf3').value = "";
+        }
+    </script>
+
+</head>
+
+<body>
+    <h1>Tweet</h1>
+    <p>ツイート一覧</p>
+    <button onclick="button1Pressed()">X</button>
+    <br>
+            検索<input id="tf1" value="" type="textfield"><button onclick="button2Pressed()">検索</button>
+    <br>
+    <hr>
+    <p id="result">xxxx</p>
+    <hr>
+    <p>ツイートする</p>
+    <br>
+    名前:<input id="tf2" value="" type="textfield">
+    <br>
+    tweet:<input id="tf3" type="textfield">
+    <button onclick="button3Pressed()">tweet</button>
+    <br>
+    <p id="result"></p>
+</body>
+
+</html>
