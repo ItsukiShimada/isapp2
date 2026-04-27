@@ -27,6 +27,7 @@
                 html = html + '<td>' + object.id + '</td>';
                 html = html + '<td>' + object.name + '</td>';
                 html = html + '<td>' + '<a href="update.html?userid=' + object.id + '">変更</a>' + '</td>';
+                html = html + '<td>' + '<button onclick="button2Pressed(\'' + object.id + '\')">削除</button>' + '</td>';
                 html = html + '</tr>';
             }
             html = html + '</table>';
@@ -36,6 +37,14 @@
         async function button1Pressed(){
             //練習問題6-3
             var userid = document.getElementById('tf1').value;
+            var sql = `delete from Users where id = "${userid}"`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            execSelect();
+        }
+
+        async function button2Pressed(userid){
+            //練習問題6-4
             var sql = `delete from Users where id = "${userid}"`;
             var objects = await osql.connect(sql);
             console.log(objects);
