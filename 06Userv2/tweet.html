@@ -17,16 +17,20 @@
             setInterval(button1Pressed,2000)
         })
 
-        function button3Pressed() {
-            doInsert();
-        }
-
         function button1Pressed() {
             doSelect();
         }
         
         function button2Pressed() {
             doSearch();
+        }
+
+        function button3Pressed() {
+            doInsert();
+        }
+
+        function button4Pressed(name){
+            doFollow(name);
         }
 
         async function doSearch(){
@@ -40,7 +44,7 @@
                 var object = objects[i];
                 html = html + '<tr>';
                 html = html + '<td>' + object.id + '</td>';
-                html = html + '<td>' + object.name + '</td>';
+                html = html + '<td>' + '<button onclick="button4Pressed(\'' + object.name + '\')">' + object.name + '</button>' + '</td>';
                 html = html + '<td>' + object.tweet + '</td>';
                 html = html + '</tr>';
             }
@@ -58,13 +62,13 @@
                 var object = objects[i];
                 html = html + '<tr>';
                 html = html + '<td>' + object.id + '</td>';
-                html = html + '<td>' + object.name + '</td>';
+                html = html + '<td>' + '<button onclick="button4Pressed(\'' + object.name + '\')">' + object.name + '</button>' + '</td>';
                 html = html + '<td>' + object.tweet + '</td>';
                 html = html + '</tr>';
             }
             html = html + '</table>';
             document.getElementById('result').innerHTML = html;
-            document.getElementById('tf2').value = sessionStorage.getItem('userid');
+            document.getElementById('tf2').value = sessionStorage.getItem('username');
         }
 
         async function doInsert() {
@@ -78,6 +82,18 @@
             document.getElementById('result').innerHTML = "tweetしました";
             document.getElementById('tf2').value = "";
             document.getElementById('tf3').value = "";
+        }
+
+        async function doFollow(name){
+            //練習問題6-6
+            var fromid = sessionStorage.getItem('username');
+            var toid = name
+
+            var sql =`insert into Follows (fromid,toid) values("${fromid}","${toid}")`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+
+            document.getElementById('result').innerHTML = toid + "をフォローしました";
         }
     </script>
 
